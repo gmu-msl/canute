@@ -1,0 +1,6 @@
+*~
+.DS_Store
+*.o
+*.so
+.*.swp
+autom4te.cache
