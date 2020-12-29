@@ -17,8 +17,8 @@ The specific features supported are described in the [Release
 Notes](./ReleaseNotes.md)
 
 Canute was originally authored 
-by Eric Osterweil and Glen Wiley gwiley@verisign.com as
-from [libsmaug](https://github.com/verisign/smaug), from VeriSign, inc.
+by Eric Osterweil and Glen Wiley as
+[libsmaug](https://github.com/verisign/smaug), from VeriSign, Inc.
 Canute is a fork of libsmaug, and is not maintained by Eric Osterweil 
 eoster@gmu.edu
 
