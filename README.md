@@ -16,8 +16,11 @@ sockets layer for TLS).
 The specific features supported are described in the [Release
 Notes](./ReleaseNotes.md)
 
-Authored by Eric Osterweil eoster@gmu.edu and Glen Wiley gwiley@verisign.com
-Forked from [libsmaug](https://github.com/verisign/smaug), from VeriSign, inc.: 
+Canute was originally authored 
+by Eric Osterweil and Glen Wiley gwiley@verisign.com as
+from [libsmaug](https://github.com/verisign/smaug), from VeriSign, inc.
+Canute is a fork of libsmaug, and is not maintained by Eric Osterweil 
+eoster@gmu.edu
 
 Also see Canute's [Thunderbird plugin](https://github.com/gmu-msl/canute-tbird-plugin).
 
