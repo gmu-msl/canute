@@ -244,6 +244,7 @@ int main(int argc, char *argv[])
       {
         // fprintf(stdout, "%s IN TYPE%d %s;\n", oID.getSmimeName().c_str(), CNT_SMIMEA_RR_TYPE, sTxt.c_str());
         fprintf(stdout, "%s IN SMIMEA %s;\n", oID.getSmimeName().c_str(), sTxt.c_str());
+        iRet = 0;
       }
     }
   }
