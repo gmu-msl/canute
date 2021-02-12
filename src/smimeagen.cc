@@ -38,7 +38,7 @@ using namespace std;
 
 void _usage()
 {
-    fprintf(stdout, "smimea-gen [ <email address> <usage number> <selector number> <matching number> <cert file in PEM format> ] | -h\n");
+    fprintf(stdout, "smimea-gen [ <email address> <usage number> <selector number> <matching number> [cert file in PEM format] ] | -h\n");
 }
 
 bool _menu(string &p_sEmail, int &p_iUsage, int &p_iSel, int &p_iMat, string &p_sAccess, string &p_sFile)
@@ -186,6 +186,10 @@ int main(int argc, char *argv[])
   else
   {
     bool bOK = false;
+    bool pipeMode = false;
+    if (5 == argc) {
+      pipeMode = true;
+    }
     if (1 == argc)
     {
       bOK = _menu(sEmail, iUsage, iSelector, iMatching, sAccess, sCertFile);
@@ -211,7 +215,7 @@ int main(int argc, char *argv[])
       }
       else
       {
-        {
+        if (!pipeMode) {
           sCertFile = argv[5];
         }
 
@@ -228,6 +232,14 @@ int main(int argc, char *argv[])
       if (!oID.init(sEmail))
       {
         fprintf(stderr, "Unable to init ID.\n");
+      } else if (pipeMode) 
+      {
+        if (!oAssoc.initFromPipe((CntUsage_e) iUsage,
+                                    (CntSelector_e) iSelector,
+                                    (CntMatching_e) iMatching))
+        {
+          fprintf(stderr, "Unable to init association from pipe.\n");
+        }
       }
       else if (!oAssoc.initFromFile((CntUsage_e) iUsage,
                                     (CntSelector_e) iSelector,

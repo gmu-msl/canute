@@ -60,6 +60,9 @@ class CntSmimeAssociation : public CntAssociation
               uint8_t *p_pCertAssocData,
               size_t p_uDataLen,
               CntX509Encoding_e p_eEncoding = CNT_X509_DER);
+    bool initFromPipe(CntUsage_e p_eUsage,
+                      CntSelector_e p_eSelector,
+                      CntMatching_e p_eMatching);
     bool initFromFile(CntUsage_e p_eUsage,
                       CntSelector_e p_eSelector,
                       CntMatching_e p_eMatching,
