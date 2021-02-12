@@ -229,30 +229,34 @@ int main(int argc, char *argv[])
       CntSmimeAssociation oAssoc;
       string sTxt;
 
+      bool failed = false;
+
       if (!oID.init(sEmail))
       {
+        failed = true;
         fprintf(stderr, "Unable to init ID.\n");
-      } else if (pipeMode) 
-      {
-        if (!oAssoc.initFromPipe((CntUsage_e) iUsage,
+      } 
+      if (!failed && pipeMode && !oAssoc.initFromPipe((CntUsage_e) iUsage,
                                     (CntSelector_e) iSelector,
                                     (CntMatching_e) iMatching))
-        {
-          fprintf(stderr, "Unable to init association from pipe.\n");
-        }
-      }
-      else if (!oAssoc.initFromFile((CntUsage_e) iUsage,
-                                    (CntSelector_e) iSelector,
-                                    (CntMatching_e) iMatching,
-                                    sCertFile))
       {
+        failed = true;
+        fprintf(stderr, "Unable to init association from pipe.\n");
+      }
+      if (!failed && !pipeMode && oAssoc.initFromFile((CntUsage_e) iUsage,
+                                      (CntSelector_e) iSelector,
+                                      (CntMatching_e) iMatching,
+                                      sCertFile))
+      {
+        failed = true;
         fprintf(stderr, "Unable to init association.\n");
       }
-      else if (!oAssoc.toText(sTxt))
+      else if (!failed && !oAssoc.toText(sTxt))
       {
+        failed = true;
         fprintf(stderr, "Unable to get text of association.\n");
       }
-      else
+      if (!failed)
       {
         // fprintf(stdout, "%s IN TYPE%d %s;\n", oID.getSmimeName().c_str(), CNT_SMIMEA_RR_TYPE, sTxt.c_str());
         fprintf(stdout, "%s IN SMIMEA %s;\n", oID.getSmimeName().c_str(), sTxt.c_str());
