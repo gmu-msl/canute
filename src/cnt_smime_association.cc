@@ -120,67 +120,6 @@ bool CntSmimeAssociation::initFromPipe(CntUsage_e p_eUsage,
   return isInitialized();
 }
 
-bool CntSmimeAssociation::isFullCert()
-{
-  return (SEL_FULL == m_eSelector && MAT_FULL == m_eMatching);
-}
-
-bool CntSmimeAssociation::isFingerprintCert()
-{
-  return MAT_FULL != m_eMatching;
-}
-
-bool CntSmimeAssociation::isTA()
-{
-  return USG_PKIX_TA == m_eUsage || USG_DANE_TA == m_eUsage;
-}
-
-bool CntSmimeAssociation::isPKIX()
-{
-  return USG_PKIX_TA == m_eUsage || USG_PKIX_EE == m_eUsage;
-}
-
-bool CntSmimeAssociation::isEE()
-{
-  return USG_PKIX_EE== m_eUsage || USG_DANE_EE == m_eUsage;
-}
-
-CntUsage_e CntSmimeAssociation::getUsage()
-{
-  return m_eUsage;
-}
-
-CntSelector_e CntSmimeAssociation::getSelector()
-{
-  return m_eSelector;
-}
-
-CntMatching_e CntSmimeAssociation::getMatching()
-{
-  return m_eMatching;
-}
-
-bool CntSmimeAssociation::getHash(CntBytesVector_t &p_oOutput)
-{
-  bool bRet = false;
-
-  if (!isInitialized())
-  {
-    cnt_log("Association is not initialized.\n");
-  }
-  else if (MAT_FULL != m_eMatching)
-  {
-    bRet = m_oCert.calcCertAssocData(m_eSelector, m_eMatching, p_oOutput);
-  }
-  else
-  {
-    p_oOutput = m_oHash;
-    bRet = true;
-  }
-
-  return true;;
-}
-
 bool CntSmimeAssociation::initFromFile(CntUsage_e p_eUsage,
                                        CntSelector_e p_eSelector,
                                        CntMatching_e p_eMatching,
