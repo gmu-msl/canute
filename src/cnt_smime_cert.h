@@ -50,6 +50,7 @@ class CntSmimeCert
     virtual ~CntSmimeCert();
 
     bool init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncoding = CNT_X509_PEM);
+    bool initFromPipe();
     bool initFromFile(std::string &p_sFile);
     bool init(uint8_t *p_pBytes, size_t p_uBytesLen, CntX509Encoding_e p_eEncoding = CNT_X509_PEM);
     /*

@@ -29,6 +29,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include <cstring>
 
@@ -119,6 +120,16 @@ bool CntSmimeCert::init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncodin
   }
 
   return m_bInit;
+}
+
+bool CntSmimeCert::initFromPipe()
+{
+  // read whole PEM cert into memory piped from stdin (it's not _that_ big, right?)
+  std::string s(std::istreambuf_iterator<char>(std::cin), {});
+  // convert to byte vector to pass to init.
+  CntBytesVector_t oBytes(s.begin(),s.end());
+
+  return init(oBytes);
 }
 
 bool CntSmimeCert::initFromFile(std::string &p_sFile)

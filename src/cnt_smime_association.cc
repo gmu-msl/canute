@@ -99,6 +99,27 @@ bool CntSmimeAssociation::init(CntUsage_e p_eUsage,
   return isInitialized();
 }
 
+bool CntSmimeAssociation::initFromPipe(CntUsage_e p_eUsage,
+                                       CntSelector_e p_eSelector,
+                                       CntMatching_e p_eMatching)
+{
+  if (isInitialized())
+  {
+    clear();
+  }
+
+  m_eUsage = p_eUsage;
+  m_eSelector = p_eSelector;
+  m_eMatching = p_eMatching;
+
+  if (m_oCert.initFromPipe())
+  {
+    CntAssociation::init();
+  }
+
+  return isInitialized();
+}
+
 bool CntSmimeAssociation::initFromFile(CntUsage_e p_eUsage,
                                        CntSelector_e p_eSelector,
                                        CntMatching_e p_eMatching,
