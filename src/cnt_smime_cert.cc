@@ -125,9 +125,20 @@ bool CntSmimeCert::init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncodin
 bool CntSmimeCert::initFromPipe()
 {
   // read whole PEM cert into memory piped from stdin (it's not _that_ big, right?)
-  std::string s(std::istreambuf_iterator<char>(std::cin), {});
+  //
+  // std::string s(std::istreambuf_iterator<char>(std::cin), std::istream_iterator<int>{});
+  // // convert to byte vector to pass to init.
+  // CntBytesVector_t oBytes(s.begin(),s.end());
+  //
+  char c = '\0';
+  std::vector<char> oV;
+  while (std::cin >> c) {
+    oV.push_back(c);
+  }
+  // std::string s(oV.begin(), oV.end();
+  //
   // convert to byte vector to pass to init.
-  CntBytesVector_t oBytes(s.begin(),s.end());
+  CntBytesVector_t oBytes(oV.begin(),oV.end());
 
   return init(oBytes);
 }
