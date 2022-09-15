@@ -38,15 +38,21 @@ class CntSmimeCert
     uint8_t *m_pPrivKeyBuf;
     size_t m_uCertBufLen;
     size_t m_uPrivKeyBufLen;
+    CntX509Encoding_e m_eEncoding;
     X509 *m_pCert;
     EVP_PKEY *m_pPubKey;
     EVP_PKEY *m_pPrivKey;
+    /*
+    EVP_PKEY m_tPubKey;
+    EVP_PKEY m_tPrivKey;
+    */
     // CMS_ContentInfo *m_pCMS;
     X509_STORE *m_pStore;
 
   // Methods
   public:
     CntSmimeCert();
+    CntSmimeCert(const CntSmimeCert &p_oRHS);
     virtual ~CntSmimeCert();
 
     bool init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncoding = CNT_X509_PEM);

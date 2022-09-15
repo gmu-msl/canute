@@ -200,7 +200,7 @@ bool CntSmimeAssociation::getHash(CntBytesVector_t &p_oOutput)
     bRet = true;
   }
 
-  return true;;
+  return bRet;
 }
 
 bool CntSmimeAssociation::getHash(std::string &p_sOutput)
@@ -385,7 +385,7 @@ bool CntSmimeAssociation::fromText(std::string &p_sTxt)
         }
         string sBytes = oSS2.str();
 
-        if (iLen != sBytes.size()/2)
+        if (iLen != (int) sBytes.size()/2)
         {
           cnt_log("The length field (%d) does not match the number of hex-encoded octets %d in '%s'\n",
                   iLen,

@@ -124,7 +124,8 @@ typedef enum
 
 typedef enum
 {
-  CNT_X509_PEM = 0,
+  CNT_ENC_PRE_INIT = -1,
+  CNT_X509_PEM,
   CNT_X509_DER
 } CntX509Encoding_e;
 

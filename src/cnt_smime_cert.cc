@@ -44,12 +44,28 @@ CntSmimeCert::CntSmimeCert()
     m_pPrivKeyBuf(NULL),
     m_uCertBufLen(0),
     m_uPrivKeyBufLen(0),
+    m_eEncoding(CNT_ENC_PRE_INIT),
     m_pCert(NULL),
     m_pPubKey(NULL),
     m_pPrivKey(NULL),
     m_pStore(NULL)
 {
 
+}
+
+CntSmimeCert::CntSmimeCert(const CntSmimeCert &p_oRHS)
+  : m_bInit(false),
+    m_pCertBuf(NULL),
+    m_pPrivKeyBuf(NULL),
+    m_uCertBufLen(0),
+    m_uPrivKeyBufLen(0),
+    m_eEncoding(CNT_ENC_PRE_INIT),
+    m_pCert(NULL),
+    m_pPubKey(NULL),
+    m_pPrivKey(NULL),
+    m_pStore(NULL)
+{
+  (*this) = p_oRHS;
 }
 
 CntSmimeCert::~CntSmimeCert()
@@ -73,6 +89,7 @@ bool CntSmimeCert::init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncodin
   }
   else
   {
+    m_eEncoding = p_eEncoding;
     m_uCertBufLen = p_oBytes.size();
     m_pCertBuf = new uint8_t[m_uCertBufLen];
     memset(m_pCertBuf, 0, m_uCertBufLen);
@@ -109,6 +126,7 @@ bool CntSmimeCert::init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncodin
       if (NULL == (m_pPrivKey = PEM_read_bio_PrivateKey(pCrypto, NULL, 0, NULL)))
       {
         cnt_log("Unable to create private key from BIO: %s\n", ERR_error_string(ERR_get_error(), pErrBuff));
+        m_pPrivKey = NULL;
       }
 
       m_bInit = true;
@@ -125,7 +143,7 @@ bool CntSmimeCert::init(CntBytesVector_t &p_oBytes, CntX509Encoding_e p_eEncodin
 bool CntSmimeCert::initFromPipe()
 {
   // read whole PEM cert into memory piped from stdin (it's not _that_ big, right?)
-  std::string s(std::istreambuf_iterator<char>(std::cin), {});
+  std::string s((std::istreambuf_iterator<char>(std::cin)), std::istreambuf_iterator<char>());
   // convert to byte vector to pass to init.
   CntBytesVector_t oBytes(s.begin(),s.end());
 
@@ -722,7 +740,8 @@ bool CntSmimeCert::sign(CntBytesVector_t &p_oBytes,
   return bRet;
 }
 
-CntSmimeCert &CntSmimeCert::operator=(CntSmimeCert const &p_oRHS)
+/*
+CntSmimeCert &CntSmimeCert::operator2=(CntSmimeCert const &p_oRHS)
 {
   clear();
   m_bInit = p_oRHS.m_bInit;
@@ -760,25 +779,36 @@ CntSmimeCert &CntSmimeCert::operator=(CntSmimeCert const &p_oRHS)
 
     if (NULL != p_oRHS.m_pPubKey)
     {
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-      CRYPTO_add(&p_oRHS.m_pPubKey->references, 1, CRYPTO_LOCK_EVP_PKEY);
-#else
-      EVP_PKEY_up_ref((EVP_PKEY *) &p_oRHS.m_pPubKey);
-#endif
       m_pPubKey = p_oRHS.m_pPubKey;
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+      CRYPTO_add(&m_pPubKey->references, 1, CRYPTO_LOCK_EVP_PKEY);
+#else
+      EVP_PKEY_up_ref((EVP_PKEY *) &m_pPubKey);
+#endif
     }
 
-    if (NULL != p_oRHS.m_pPrivKey)
+    if (NULL != p_oRHS.m_pPrivKey && m_uPrivKeyBufLen > 0)
     {
-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-      CRYPTO_add(&p_oRHS.m_pPrivKey->references, 1, CRYPTO_LOCK_EVP_PKEY);
-#else
-      EVP_PKEY_up_ref((EVP_PKEY *) &p_oRHS.m_pPrivKey);
-#endif
       m_pPrivKey = p_oRHS.m_pPrivKey;
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+      CRYPTO_add(&m_pPrivKey->references, 1, CRYPTO_LOCK_EVP_PKEY);
+#else
+      EVP_PKEY_up_ref((EVP_PKEY *) &m_pPrivKey);
+#endif
     }
   }
 
   return *this;
 }
+*/
 
+CntSmimeCert &CntSmimeCert::operator=(CntSmimeCert const &p_oRHS)
+{
+  clear();
+  m_bInit = p_oRHS.m_bInit;
+
+  if (m_bInit)
+  {
+    init(p_oRHS.m_pCertBuf, p_oRHS.m_uCertBufLen, p_oRHS.m_eEncoding);
+  }
+}
