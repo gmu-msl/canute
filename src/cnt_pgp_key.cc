@@ -504,7 +504,7 @@ bool CntPgpKey::decrypt(CntBytesVector_t &p_oEncryptedBytes,
     cnt_log("Unable to create new sig buffer: %s\n", gpgme_strerror(tErr));
   }
   else if (-1 == (lRet = gpgme_data_write(pEnc, p_oEncryptedBytes.data(), uEncLen))
-           || lRet != uEncLen
+           || lRet != (ssize_t) uEncLen
            || 0 != gpgme_data_seek(pEnc, 0, SEEK_SET))
   {
     cnt_log("Unable to copy data into buffer and rewind: %lu != %lu: %s\n", lRet, uEncLen, strerror(errno));
@@ -605,7 +605,7 @@ bool CntPgpKey::sign(CntBytesVector_t &p_oBytes,
     cnt_log("Unable to create new sig buffer: %s\n", gpgme_strerror(tErr));
   }
   else if (-1 == (lRet = gpgme_data_write(pPlain, p_oBytes.data(), uByteLen))
-           || lRet != uByteLen
+           || lRet != (ssize_t) uByteLen
            || 0 != gpgme_data_seek(pPlain, 0, SEEK_SET))
   {
     cnt_log("Unable to copy data into buffer and rewind: %lu != %lu: %s\n", lRet, uByteLen, strerror(errno));
@@ -706,8 +706,10 @@ bool CntPgpKey::primeGpgme()
   bool bRet = false;
 
   gpgme_error_t tErr;
+  /*
   const char *szVersion = NULL;
   szVersion = gpgme_check_version(NULL);
+  */
   setlocale(LC_ALL, "");
   gpg_err_init();
   gpgme_set_locale(NULL, LC_CTYPE, setlocale(LC_CTYPE, NULL));

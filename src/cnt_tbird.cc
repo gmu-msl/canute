@@ -51,7 +51,6 @@ const char* hash_sha224(const char *p_szKey)
 int cnt_init(const char *p_szEmailAddr, const char *p_szCertFilePath, const char *p_szLogFile)
 {
   int iRet = 0;
-  const char *szRet = NULL;
 
   try
   {
@@ -69,12 +68,10 @@ int cnt_init(const char *p_szEmailAddr, const char *p_szCertFilePath, const char
     if (NULL == p_szEmailAddr)
     {
       cnt_log("Unable to load ID with NULL email address.\n");
-      szRet = "Unable to load ID with NULL email address";
     }
     else if (NULL == p_szCertFilePath)
     {
       cnt_log("Unable to load NULL file.\n");
-      szRet = "Unable to load NULL file.";
     }
     else
     {
@@ -83,32 +80,26 @@ int cnt_init(const char *p_szEmailAddr, const char *p_szCertFilePath, const char
       if (!oID.init(sEmail))
       {
         cnt_log("Unable to initialized ID with email '%s'\n", sEmail.c_str());
-        szRet = "Unable to initialized ID with email";
       }
       else if (!oAssoc.initFromFile(USG_DANE_EE, SEL_FULL, MAT_FULL, sFile))
       {
         cnt_log("Unable to init cert, for encryption, from file '%s'\n", sFile.c_str());
-        szRet = "Unable to init cert, for encryption, from file";
       }
       else if (!oID.addAssociation(oAssoc))
       {
         cnt_log("Unable to add encryption association for file '%s'\n", sFile.c_str());
-        szRet = "Unable to add encryption association for file ";
       }
       else if (!oAssoc.initFromFile(USG_DANE_EE, SEL_FULL, MAT_FULL, sFile))
       {
         cnt_log("Unable to init cert, for signing, from file '%s'\n", sFile.c_str());
-        szRet = "Unable to init cert, for signing, from file";
       }
       else if (!oID.addAssociation(oAssoc))
       {
         cnt_log("Unable to add signing association for file '%s'\n", sFile.c_str());
-        szRet = "Unable to add signing association for file ";
       }
       else if (!oCache.addID(oID, 0))
       {
         cnt_log("Unable to add ID to cache.\n");
-        szRet = "Unable to add ID to cache.";
       }
       else
       {
@@ -120,12 +111,10 @@ cnt_log("ADDED ID, '%s'\n", sEmail.c_str());
   catch (...)
   {
     cnt_log("Caught exception.\n");
-    szRet = "Caught exception.";
     iRet = 0;
   }
 
   return iRet;
-  // return szRet;
 }
 
 // returns 1 == OK, 0 == ERR per CMS_verify
@@ -263,7 +252,6 @@ int cnt_decrypt(const char *p_szEmail, const char *p_pBuf, const char **p_pOutpu
         }
         else
         {
-          bool bDecrypted = false;
           for (CntSmimeAssocKIter_t tIter = oID.beginSmimeAssociations();
                oID.endSmimeAssociations() != tIter;
                tIter++)
@@ -274,7 +262,6 @@ int cnt_decrypt(const char *p_szEmail, const char *p_pBuf, const char **p_pOutpu
 
             if (oCert.decrypt(sBody, oOut))
             {
-              bDecrypted = true;
               sRet.assign((char *) oOut.data(), oOut.size());
               iRet = 1;
               break;

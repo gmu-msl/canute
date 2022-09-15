@@ -215,7 +215,7 @@ bool CntPgpAssociation::fromText(std::string &p_sTxt)
         }
         string sBytes = oSS2.str();
 
-        if (iLen != sBytes.size()/2)
+        if (iLen != (int) sBytes.size()/2)
         {
           cnt_log("The length field (%d) does not match the number of hex-encoded octets %d in '%s'\n",
                   iLen,
