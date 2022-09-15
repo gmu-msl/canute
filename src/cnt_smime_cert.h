@@ -74,8 +74,8 @@ class CntSmimeCert
     uint8_t *getPrivateKey();
     size_t getPrivateKeyLen();
 
-    uint8_t *getBytes();
-    size_t getBytesLen();
+    uint8_t *getBytes() const;
+    size_t getBytesLen() const;
 
     bool verify(CntBytesVector_t &p_oBytes);
     bool encrypt(CntBytesVector_t &p_oBytes,

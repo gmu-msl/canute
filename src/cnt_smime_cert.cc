@@ -399,12 +399,12 @@ size_t CntSmimeCert::getPrivateKeyLen()
   return m_uPrivKeyBufLen;
 }
 
-uint8_t *CntSmimeCert::getBytes()
+uint8_t *CntSmimeCert::getBytes() const
 {
   return m_pCertBuf;
 }
 
-size_t CntSmimeCert::getBytesLen()
+size_t CntSmimeCert::getBytesLen() const
 {
   return m_uCertBufLen;
 }
@@ -809,6 +809,8 @@ CntSmimeCert &CntSmimeCert::operator=(CntSmimeCert const &p_oRHS)
 
   if (m_bInit)
   {
-    init(p_oRHS.m_pCertBuf, p_oRHS.m_uCertBufLen, p_oRHS.m_eEncoding);
+    init(p_oRHS.getBytes(), p_oRHS.getBytesLen(), p_oRHS.m_eEncoding);
   }
+
+  return *this;
 }
