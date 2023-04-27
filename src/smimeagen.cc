@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
         failed = true;
         fprintf(stderr, "Unable to init association from pipe.\n");
       }
-      if (!failed && !pipeMode && oAssoc.initFromFile((CntUsage_e) iUsage,
+      if (!failed && !pipeMode && !oAssoc.initFromFile((CntUsage_e) iUsage,
                                       (CntSelector_e) iSelector,
                                       (CntMatching_e) iMatching,
                                       sCertFile))
